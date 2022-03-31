@@ -1,4 +1,4 @@
-package project1.jcscheufele.dbs2_d22.cs.wpi;
+package project1.jcscheufele.dbs2_d22.cs.wpi.java;
 
 /**
  * Hello world!
