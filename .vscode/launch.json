@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch CS4432_Project1_jcscheufele",
+            "request": "launch",
+            "mainClass": "project1.jcscheufele.dbs2_d22.cs.wpi.java.CS4432_Project1_jcscheufele",
+            "projectName": "project1_joseph_scheufele",
+            "args": "${command:SpecifyProgramArgs}"
+        }
+    ]
+}
