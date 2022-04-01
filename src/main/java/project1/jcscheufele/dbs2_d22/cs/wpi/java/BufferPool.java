@@ -21,6 +21,7 @@ public class BufferPool {
         }
     }
 
+    //Loads a full block to the memory from disk via the buffer reader class, it also makes sure to reset the pinned and dirty flags.
     public void loadFromDisk(int Fid, int Bid){
         String path = String.format("src/main/java/project1/jcscheufele/dbs2_d22/cs/wpi/resources/F%d.txt", Bid);
         try {
@@ -40,6 +41,7 @@ public class BufferPool {
         }
     }
 
+    //saves the data from a block to the disk via the filewriter class, it also makes sure to make the frame as empty
     public void saveToDisk(int Fid, int Bid){
         String path = String.format("src/main/java/project1/jcscheufele/dbs2_d22/cs/wpi/resources/F%d.txt", Bid);
         try {
@@ -55,11 +57,13 @@ public class BufferPool {
         }
     }
 
+    //Returns true if the block is not dirty
     public boolean isFrameDirty(int i){
         Frame block = pool[i];
         return !block.getDirty();
     }
 
+    //finds the first non-pinned frame starting from 0
     public int firstFramePinned(){
         for (int i=0; i<poolSize ; i++) {
             Frame block = pool[i];
@@ -68,6 +72,7 @@ public class BufferPool {
         return -1;
     }
 
+    //finds the first empty frame starting from 0
     public int firstFrameEmpty() {
         for (int i=0; i<poolSize ; i++) {
             if (bitmap[i] == 0) return i;
@@ -75,6 +80,7 @@ public class BufferPool {
         return -1;
     }
 
+    //finds if the given block id is already a block in memory
     public int isBlockinMemory(int Bid){
         for (int i=0; i<poolSize ; i++) {
             if (bitmap[i] == Bid) return i;
@@ -82,10 +88,12 @@ public class BufferPool {
         return -1;
     }
 
+    //given a record id figure out which block that corresponds to (ex: Rid: 643 = block 7)
     public int calcBlockIDfromRecordID(int Rid) {
         return (int) ((Rid-1)/100) + 1;
     }
 
+    //first checks if the block requested is already in memory, then if there is an unpinned non-dirty block, then unpinned dirty.
     public int checkForBlock(int Bid){
         int Fid = isBlockinMemory(Bid);
         int Fid_E = firstFrameEmpty();
@@ -117,11 +125,14 @@ public class BufferPool {
         }
     }
 
+    //returns a frame given a frame id (0,1,2)
     public Frame getFrame(int Fid) {
         Frame frame = pool[Fid];
         return frame;
     }
 
+    //gets the record from the specific block. check for block will load the block to disk if necessary.
+    //returns a string of either an error or the found record.
     public String GET(int Rid){
         int Bid = calcBlockIDfromRecordID(Rid);
         int status = checkForBlock(Bid);
@@ -135,6 +146,8 @@ public class BufferPool {
         }
     }
 
+    //sets the record in the specific block. check for block will load the block to disk if necessary.
+    //returns a string of either an error or that the write was successful. it also updates the dirty flag
     public String SET(int Rid, String rec){
         int Bid = calcBlockIDfromRecordID(Rid);
         int status = checkForBlock(Bid);
@@ -151,26 +164,31 @@ public class BufferPool {
         }
     }
 
+    //will load a block into memory to pin if available.
     public String PIN(int Bid){
         int status = checkForBlock(Bid);
         if (status != -1) {
             Frame block = getFrame(status);
-            block.setPinned(true);
-            String success = String.format("File %d is pinned in Frame %d; Frame %d was not already pinned;", Bid, status+1, status+1);
-            return success;
+            if (!block.getPinned()){
+                block.setPinned(true);
+                return String.format("File %d is pinned in Frame %d; Frame %d was not already pinned;", Bid, status+1, status+1);
+            } else {
+                return String.format("Already Pinned.", Bid, status+1, status+1);
+            }
         } else {
             String err = String.format("The corresponding block#<%d> cannot be pinned because the memory buffers are full.", Bid);
             return err;
         }
     }
 
+    //will check to see if the given block id corresponds to a block that is pinned in memory.
     public String UNPIN(int Bid){
         int status = isBlockinMemory(Bid);
         if (status != -1) {
             Frame block = getFrame(status);
             if (block.getPinned()){
                 block.setPinned(false);
-                return String.format("File %d is unpinned in Frame %d; Frame %d was not already pinned.", Bid, status+1, status+1);
+                return String.format("File %d is unpinned in Frame %d; Frame %d was not already unpinned.", Bid, status+1, status+1);
             } else {
                 return String.format("File %d is unpinned in Frame %d; Frame %d was already unpinned.", Bid, status+1, status+1);
             }

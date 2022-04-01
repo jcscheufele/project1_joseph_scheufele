@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: project1.jcscheufele.dbs2_d22.cs.wpi.java.AppTest
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s - in project1.jcscheufele.dbs2_d22.cs.wpi.java.AppTest

@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 /*
 This class is for parsing the inputs, displaying the output and instantiating the bufferpool.
-
 */
 public class App 
 {
@@ -12,6 +11,7 @@ public class App
     public Scanner input;
     public BufferPool bP;
 
+    //parse for the poolSize variable
     public App(String[] args) {
         if (args.length > 0) {
             System.out.println("The command line arguments are:");
@@ -25,6 +25,7 @@ public class App
         input = new Scanner(System.in);
     }
 
+    //switch cases depending of whether the user inputted GET, SET, PIN, UNPIN
     public void run() {
         while (!exit) {
             System.out.println("The program is ready for the next command.");
@@ -47,7 +48,7 @@ public class App
                 case 4:
                     print = bP.UNPIN(actions[1]);
                     break;
-                case 5:
+                case 5: //If just given the number five as the command (obviously not the Block id or record id), it will exit cleanly
                     exit = true;
                     print = "Exiting the program now.";
                     break;
@@ -56,6 +57,7 @@ public class App
         }
     }
 
+    //parses the user input while running the program
     public int[] inputParser(String command) {
         String[] words = command.split(" ", 3);
         int action;

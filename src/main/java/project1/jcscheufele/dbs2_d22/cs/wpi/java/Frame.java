@@ -1,5 +1,9 @@
 package project1.jcscheufele.dbs2_d22.cs.wpi.java;
 
+/*
+This is the Frame class, it handles the individual data frames within the buffer manager.
+*/
+
 public class Frame {
     private String content;
     private boolean dirty;
@@ -13,6 +17,7 @@ public class Frame {
         blockID = -1; //the block that is residing in this frame currently
     }
 
+    //since each file is a single string, i decided to split it into a string array by the period. The remainder of (Record id-1) mod 100 is the index to the string array.
     public String getRecord(int Rid) {
         String[] newContent = content.split("\\.");
         return newContent[Rid];
@@ -25,6 +30,9 @@ public class Frame {
         content = ret;
     }
 
+    /*
+    Baisc Getters and setters below.    
+    */
     public String getContent() {
         return content;
     }
